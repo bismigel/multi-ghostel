@@ -1,4 +1,4 @@
-#+title: multi-ghostel
+n#+title: multi-ghostel
 #+author: bismigel
 #+email: bismigel@pm.me
 
@@ -12,8 +12,8 @@ and a togglable dedicated window.
 * Commands
 | Command                          | Suggested key | Description                                              |
 |----------------------------------+---------------+----------------------------------------------------------|
-| =multi-ghostel-cwd=              | =C-c t=       | Reuse the terminal for this directory, else create one. ***Preferred.*** |
 | =multi-ghostel=                  | =C-c T=       | Always start a new session here.                         |
+| =multi-ghostel-cwd=              | =C-c t=       | Reuse the terminal for this directory, else create one. Not a port I just personally like this behaviour  |
 | =multi-ghostel-dedicated-toggle= | =C-`=         | Show/hide the dedicated terminal window.                 |
 | =multi-ghostel-dedicated-open=   |               | Open it (creating the terminal if needed).               |
 | =multi-ghostel-dedicated-close=  |               | Close it; the terminal keeps running.                    |

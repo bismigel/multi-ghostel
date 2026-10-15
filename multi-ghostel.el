@@ -85,6 +85,7 @@
 ;;; Code:
 
 (require 'ghostel)
+(eval-when-compile (require 'subr-x))  ; `if-let*' on Emacs < 29
 
 (defgroup multi-ghostel nil
   "Manage multiple ghostel terminals."
