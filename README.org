@@ -1,4 +1,4 @@
-n#+title: multi-ghostel
+#+title: multi-ghostel
 #+author: bismigel
 #+email: bismigel@pm.me
 
