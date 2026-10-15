@@ -6,29 +6,43 @@ A [[https://github.com/dakra/ghostel][ghostel]] port of
 [[https://github.com/suonlight/multi-vterm][multi-vterm]].
 
 Most of multi-vterm already ships with ghostel, so this package only adds
-what is missing: an always-new terminal command and a togglable dedicated
-window.
+what is missing: directory-scoped reuse, an always-new terminal command,
+and a togglable dedicated window.
 
 * Commands
 | Command                          | Suggested key | Description                                              |
 |----------------------------------+---------------+----------------------------------------------------------|
-| =multi-ghostel=                  | =C-c t=       | New session in the current directory (see note below).   |
+| =multi-ghostel-cwd=              | =C-c t=       | Reuse the terminal for this directory, else create one. ***Preferred.*** |
+| =multi-ghostel=                  | =C-c T=       | Always start a new session here.                         |
 | =multi-ghostel-dedicated-toggle= | =C-`=         | Show/hide the dedicated terminal window.                 |
 | =multi-ghostel-dedicated-open=   |               | Open it (creating the terminal if needed).               |
 | =multi-ghostel-dedicated-close=  |               | Close it; the terminal keeps running.                    |
 | =multi-ghostel-dedicated-select= |               | Focus it.                                                |
 
-=multi-ghostel= exists because plain =ghostel= /reuses/ its buffer (and
-therefore keeps that terminal's directory), whereas multi-vterm always
-starts a fresh session.
+=multi-ghostel-cwd= keys off =default-directory= (so it follows =cd= via
+OSC 7).  It is the author's *preferred* behavior: one reusable terminal per
+directory.  =multi-ghostel= exists because plain =ghostel= /reuses/ its
+buffer (and therefore keeps that terminal's directory), whereas multi-vterm
+always starts a fresh session.
 
 * Installation
 #+begin_src emacs-lisp
 (add-to-list 'load-path "/path/to/multi-ghostel")
 (require 'multi-ghostel)
-(global-set-key (kbd "C-c t") #'multi-ghostel)
+(global-set-key (kbd "C-c t") #'multi-ghostel-cwd)
+(global-set-key (kbd "C-c T") #'multi-ghostel)
 (global-set-key (kbd "C-`")   #'multi-ghostel-dedicated-toggle)
 #+end_src
+
+* Naming
+=multi-ghostel-cwd= does not name buffers itself; naming is ghostel's job:
+
+#+begin_src emacs-lisp
+(setq ghostel-buffer-name-function #'ghostel-buffer-name-by-directory)
+#+end_src
+
+This names /and/ keeps syncing every ghostel buffer to its directory (it is
+global, not limited to =multi-ghostel-cwd=).
 
 * Customization
 - =multi-ghostel-dedicated-window-height= — lines (default 30).
@@ -53,8 +67,16 @@ Dropped as redundant (ghostel provides an equivalent):
 | =multi-vterm-switch=          | =ghostel-next=, =ghostel-previous=                  |
 
 Ported: the dedicated-window commands, their height customization, and the
-window/buffer existence helpers.  Added: =multi-ghostel= (always-new) and
+window/buffer existence helpers.  Added: =multi-ghostel-cwd= (reuse by
+directory), =multi-ghostel= (always-new), and
 =multi-ghostel-dedicated-get-buffer=.
+
+* Credits
+This package is a port of
+[[https://github.com/suonlight/multi-vterm][multi-vterm]] by Minh Nguyen-Hue
+<minh.nh1989@gmail.com>.
+
+Developed with the assistance of an AI coding assistant (opencode).
 
 * License
 GPL-3.0-or-later.

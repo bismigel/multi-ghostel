@@ -10,6 +10,8 @@
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
 ;; This file is not part of GNU Emacs.
+;;
+;; Ported from multi-vterm.el; see the Commentary for credits.
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -27,7 +29,8 @@
 ;;; Commentary:
 
 ;; A ghostel port of `multi-vterm.el' (like `multi-term.el' but for
-;; vterm).
+;; vterm).  The author's preferred entry point is `multi-ghostel-cwd':
+;; one reusable terminal per directory.
 ;;
 ;; Ghostel already ships most of what `multi-vterm' provides, so the
 ;; corresponding commands are intentionally NOT reimplemented here:
@@ -41,12 +44,17 @@
 ;;                                `ghostel-buffer-name-function'
 ;;   multi-vterm-shell-name    -> `ghostel-shell'
 ;;
-;; Two commands have no exact equivalent:
+;; A few commands have no exact equivalent:
 ;;
 ;; * `multi-vterm' always starts a NEW session in the current directory,
 ;;   while `ghostel' reuses its existing buffer (which keeps whatever
 ;;   directory it was in).  `multi-ghostel' below restores the
 ;;   always-new behavior.
+;;
+;; * Ghostel has no command that reuses a terminal by directory.
+;;   `multi-ghostel-cwd' switches to the terminal whose
+;;   `default-directory' matches the current one, or starts a new session
+;;   there; naming is left to `ghostel-buffer-name-function'.
 ;;
 ;; * Ghostel has no *dedicated* terminal window that can be toggled open
 ;;   and closed independently of the terminals that participate in normal
@@ -63,8 +71,16 @@
 ;;
 ;; Suggested key bindings:
 ;;
-;;   (global-set-key (kbd "C-c t") #'multi-ghostel)
+;;   (global-set-key (kbd "C-c t") #'multi-ghostel-cwd)
+;;   (global-set-key (kbd "C-c T") #'multi-ghostel)
 ;;   (global-set-key (kbd "C-`")   #'multi-ghostel-dedicated-toggle)
+;;
+;; Acknowledgements:
+;;
+;; Ported from multi-vterm.el by Minh Nguyen-Hue <minh.nh1989@gmail.com>:
+;; https://github.com/suonlight/multi-vterm
+;;
+;; Developed with the assistance of an AI coding assistant (opencode).
 
 ;;; Code:
 
@@ -114,6 +130,32 @@ returned."
   (ghostel-create ghostel-buffer-name
                   (append display-buffer--same-window-action
                           '((category . comint)))))
+
+;;;###autoload
+(defun multi-ghostel-cwd ()
+  "Switch to the ghostel terminal for the current directory.
+Reuse a live ghostel buffer whose `default-directory' matches the current
+directory (this follows `cd', via OSC 7); otherwise start a new session
+there.  Buffer naming is left to `ghostel-buffer-name-function', e.g.
+
+  (setq ghostel-buffer-name-function #\\='ghostel-buffer-name-by-directory)"
+  (interactive)
+  (let ((dir (expand-file-name default-directory)))
+    (if-let* ((existing
+               (seq-find (lambda (buffer)
+                           (and (with-current-buffer buffer
+                                  (derived-mode-p 'ghostel-mode))
+                                (equal (expand-file-name
+                                        (buffer-local-value 'default-directory
+                                                            buffer))
+                                       dir)))
+                         (buffer-list))))
+        (pop-to-buffer existing
+                       (append display-buffer--same-window-action
+                               '((category . comint))))
+      (ghostel-create ghostel-buffer-name
+                      (append display-buffer--same-window-action
+                              '((category . comint)))))))
 
 (defun multi-ghostel-window-exist-p (window)
   "Return non-nil when WINDOW is a live window."
