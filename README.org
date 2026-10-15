@@ -42,7 +42,7 @@ Dropped as redundant (ghostel provides an equivalent):
 | multi-vterm                   | ghostel                                             |
 |-------------------------------+-----------------------------------------------------|
 | =multi-vterm-project=         | =ghostel-project=                                   |
-| =multi-vterm-next= /=prev=    | =ghostel-next= /=ghostel-previous=                  |
+| =multi-vterm-next=, =multi-vterm-prev= | =ghostel-next=, =ghostel-previous=          |
 | =multi-vterm-get-buffer=      | =ghostel-create=                                    |
 | =multi-vterm-handle-close=    | =ghostel-kill-buffer-on-exit=                       |
 | =multi-vterm-rename-buffer=   | =rename-buffer= / =ghostel-buffer-name-function=    |
@@ -50,7 +50,7 @@ Dropped as redundant (ghostel provides an equivalent):
 | =multi-vterm-program=         | =ghostel-shell=                                     |
 | =multi-vterm-buffer-name=     | =ghostel-buffer-name=                               |
 | =multi-vterm-buffer-list=     | =ghostel-buffer-list=                               |
-| =multi-vterm-switch=          | =ghostel-next= /=ghostel-previous=                  |
+| =multi-vterm-switch=          | =ghostel-next=, =ghostel-previous=                  |
 
 Ported: the dedicated-window commands, their height customization, and the
 window/buffer existence helpers.  Added: =multi-ghostel= (always-new) and
