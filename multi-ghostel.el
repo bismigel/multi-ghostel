@@ -3,6 +3,7 @@
 ;; Copyright (C) 2026 bismigel
 
 ;; Author: bismigel <bismigel@pm.me>
+;; Assisted-by: opencode:deepseek-flash
 ;; URL: https://github.com/bismigel/multi-ghostel
 ;; Version: 1.0.0
 ;; Package-Requires: ((emacs "28.1") (ghostel "0.52.0"))
