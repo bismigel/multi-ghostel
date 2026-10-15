@@ -26,6 +26,43 @@ multi-vterm; plain =ghostel= reuses its buffer and keeps that terminal's
 directory.
 
 * Installation
+
+** From GitHub
+Emacs 29+ ships =package-vc-install=:
+
+#+begin_src emacs-lisp
+(package-vc-install "https://github.com/bismigel/multi-ghostel")
+#+end_src
+
+=use-package= (Emacs 29.1+) can do it in one form:
+
+#+begin_src emacs-lisp
+(use-package multi-ghostel
+  :vc (:url "https://github.com/bismigel/multi-ghostel")
+  :bind (("C-c t" . multi-ghostel-cwd)
+         ("C-c T" . multi-ghostel)
+         ("C-`"   . multi-ghostel-dedicated-toggle)))
+#+end_src
+
+With [[https://github.com/radian-software/straight.el][straight.el]]:
+
+#+begin_src emacs-lisp
+(straight-use-package
+ '(multi-ghostel :type git :host github :repo "bismigel/multi-ghostel"))
+#+end_src
+
+With [[https://github.com/quelpa/quelpa-use-package][quelpa-use-package]]:
+
+#+begin_src emacs-lisp
+(quelpa-use-package multi-ghostel
+  :quelpa (multi-ghostel :fetcher github :repo "bismigel/multi-ghostel"))
+#+end_src
+
+All of these resolve the =ghostel= dependency (available on MELPA) from
+=Package-Requires=.  =package-vc-install= and =:vc= need Emacs 29+; straight
+and quelpa also work on older Emacs.
+
+** Manual
 #+begin_src emacs-lisp
 (add-to-list 'load-path "/path/to/multi-ghostel")
 (require 'multi-ghostel)
