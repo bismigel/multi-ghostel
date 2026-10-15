@@ -13,17 +13,17 @@ and a togglable dedicated window.
 | Command                          | Suggested key | Description                                              |
 |----------------------------------+---------------+----------------------------------------------------------|
 | =multi-ghostel=                  | =C-c T=       | Always start a new session here.                         |
-| =multi-ghostel-cwd=              | =C-c t=       | Reuse the terminal for this directory, else create one. Not a port I just personally like this behaviour  |
+| =multi-ghostel-cwd=              | =C-c t=       | Reuse the terminal for this directory, else create one. *Preferred.* |
 | =multi-ghostel-dedicated-toggle= | =C-`=         | Show/hide the dedicated terminal window.                 |
 | =multi-ghostel-dedicated-open=   |               | Open it (creating the terminal if needed).               |
 | =multi-ghostel-dedicated-close=  |               | Close it; the terminal keeps running.                    |
 | =multi-ghostel-dedicated-select= |               | Focus it.                                                |
 
 =multi-ghostel-cwd= keys off =default-directory= (so it follows =cd= via
-OSC 7).  It is the author's *preferred* behavior: one reusable terminal per
-directory.  =multi-ghostel= exists because plain =ghostel= /reuses/ its
-buffer (and therefore keeps that terminal's directory), whereas multi-vterm
-always starts a fresh session.
+OSC 7), giving one reusable terminal per directory.  It is the author's
+preferred behavior and is not a multi-vterm port.  =multi-ghostel= is the
+port of =multi-vterm= (always a fresh session), since plain =ghostel=
+/reuses/ its buffer and keeps that terminal's directory.
 
 * Installation
 #+begin_src emacs-lisp
