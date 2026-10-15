@@ -20,10 +20,10 @@ and a togglable dedicated window.
 | =multi-ghostel-dedicated-select= |               | Focus it.                                                |
 
 =multi-ghostel-cwd= keys off =default-directory= (so it follows =cd= via
-OSC 7), giving one reusable terminal per directory.  It is the author's
-preferred behavior and is not a multi-vterm port.  =multi-ghostel= is the
-port of =multi-vterm= (always a fresh session), since plain =ghostel=
-/reuses/ its buffer and keeps that terminal's directory.
+OSC 7): one reusable terminal per directory.  This is the author's preferred
+behavior.  =multi-ghostel= instead always starts a fresh session, matching
+multi-vterm; plain =ghostel= reuses its buffer and keeps that terminal's
+directory.
 
 * Installation
 #+begin_src emacs-lisp
