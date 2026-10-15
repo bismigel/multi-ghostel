@@ -32,7 +32,6 @@
 ;; Ghostel already ships most of what `multi-vterm' provides, so the
 ;; corresponding commands are intentionally NOT reimplemented here:
 ;;
-;;   multi-vterm               -> `ghostel'
 ;;   multi-vterm-project       -> `ghostel-project'
 ;;   multi-vterm-next          -> `ghostel-next'
 ;;   multi-vterm-prev          -> `ghostel-previous'
@@ -42,14 +41,21 @@
 ;;                                `ghostel-buffer-name-function'
 ;;   multi-vterm-shell-name    -> `ghostel-shell'
 ;;
-;; The one feature ghostel lacks is a *dedicated* terminal window that
-;; can be toggled open and closed independently of the terminals that
-;; participate in normal window management.  This package adds it:
+;; Two commands have no exact equivalent:
 ;;
-;;   M-x multi-ghostel-dedicated-open    open (creating if needed)
-;;   M-x multi-ghostel-dedicated-close   close, keeping the buffer alive
-;;   M-x multi-ghostel-dedicated-toggle  toggle
-;;   M-x multi-ghostel-dedicated-select  focus the dedicated window
+;; * `multi-vterm' always starts a NEW session in the current directory,
+;;   while `ghostel' reuses its existing buffer (which keeps whatever
+;;   directory it was in).  `multi-ghostel' below restores the
+;;   always-new behavior.
+;;
+;; * Ghostel has no *dedicated* terminal window that can be toggled open
+;;   and closed independently of the terminals that participate in normal
+;;   window management.  This package adds one:
+;;
+;;     M-x multi-ghostel-dedicated-open    open (creating if needed)
+;;     M-x multi-ghostel-dedicated-close   close, keeping the buffer alive
+;;     M-x multi-ghostel-dedicated-toggle  toggle
+;;     M-x multi-ghostel-dedicated-select  focus the dedicated window
 ;;
 ;; The dedicated buffer is a regular ghostel buffer created with
 ;; `ghostel-create', so it still receives output while its window is
@@ -57,7 +63,8 @@
 ;;
 ;; Suggested key bindings:
 ;;
-;;   (global-set-key (kbd "C-c t") #'multi-ghostel-dedicated-toggle)
+;;   (global-set-key (kbd "C-c t") #'multi-ghostel)
+;;   (global-set-key (kbd "C-`")   #'multi-ghostel-dedicated-toggle)
 
 ;;; Code:
 
@@ -95,6 +102,18 @@ value is clamped to `multi-ghostel-dedicated-window-height-percent-limits'."
 
 (defvar multi-ghostel-dedicated-buffer nil
   "The dedicated `multi-ghostel' buffer, or nil when none exists.")
+
+;;;###autoload
+(defun multi-ghostel ()
+  "Start a new ghostel terminal in the current directory.
+Unlike `ghostel', which reuses its existing terminal (and therefore that
+terminal's directory), this always creates a fresh session, mirroring
+`multi-vterm'.  The new buffer is shown in the selected window and
+returned."
+  (interactive)
+  (ghostel-create ghostel-buffer-name
+                  (append display-buffer--same-window-action
+                          '((category . comint)))))
 
 (defun multi-ghostel-window-exist-p (window)
   "Return non-nil when WINDOW is a live window."

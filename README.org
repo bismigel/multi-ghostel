@@ -1,0 +1,60 @@
+#+title: multi-ghostel
+#+author: bismigel
+#+email: bismigel@pm.me
+
+A [[https://github.com/dakra/ghostel][ghostel]] port of
+[[https://github.com/suonlight/multi-vterm][multi-vterm]].
+
+Most of multi-vterm already ships with ghostel, so this package only adds
+what is missing: an always-new terminal command and a togglable dedicated
+window.
+
+* Commands
+| Command                          | Suggested key | Description                                              |
+|----------------------------------+---------------+----------------------------------------------------------|
+| =multi-ghostel=                  | =C-c t=       | New session in the current directory (see note below).   |
+| =multi-ghostel-dedicated-toggle= | =C-`=         | Show/hide the dedicated terminal window.                 |
+| =multi-ghostel-dedicated-open=   |               | Open it (creating the terminal if needed).               |
+| =multi-ghostel-dedicated-close=  |               | Close it; the terminal keeps running.                    |
+| =multi-ghostel-dedicated-select= |               | Focus it.                                                |
+
+=multi-ghostel= exists because plain =ghostel= /reuses/ its buffer (and
+therefore keeps that terminal's directory), whereas multi-vterm always
+starts a fresh session.
+
+* Installation
+#+begin_src emacs-lisp
+(add-to-list 'load-path "/path/to/multi-ghostel")
+(require 'multi-ghostel)
+(global-set-key (kbd "C-c t") #'multi-ghostel)
+(global-set-key (kbd "C-`")   #'multi-ghostel-dedicated-toggle)
+#+end_src
+
+* Customization
+- =multi-ghostel-dedicated-window-height= — lines (default 30).
+- =multi-ghostel-dedicated-window-height-percent= — percent, clamped 10–90;
+  overrides the line height when non-nil.
+- =multi-ghostel-dedicated-buffer-name= — default ="*ghostel - dedicated*=".
+
+* Port map
+Dropped as redundant (ghostel provides an equivalent):
+
+| multi-vterm                   | ghostel                                             |
+|-------------------------------+-----------------------------------------------------|
+| =multi-vterm-project=         | =ghostel-project=                                   |
+| =multi-vterm-next= /=prev=    | =ghostel-next= /=ghostel-previous=                  |
+| =multi-vterm-get-buffer=      | =ghostel-create=                                    |
+| =multi-vterm-handle-close=    | =ghostel-kill-buffer-on-exit=                       |
+| =multi-vterm-rename-buffer=   | =rename-buffer= / =ghostel-buffer-name-function=    |
+| =multi-vterm-shell-name=      | =ghostel-shell=                                     |
+| =multi-vterm-program=         | =ghostel-shell=                                     |
+| =multi-vterm-buffer-name=     | =ghostel-buffer-name=                               |
+| =multi-vterm-buffer-list=     | =ghostel-buffer-list=                               |
+| =multi-vterm-switch=          | =ghostel-next= /=ghostel-previous=                  |
+
+Ported: the dedicated-window commands, their height customization, and the
+window/buffer existence helpers.  Added: =multi-ghostel= (always-new) and
+=multi-ghostel-dedicated-get-buffer=.
+
+* License
+GPL-3.0-or-later.
