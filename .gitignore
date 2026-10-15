@@ -1,0 +1,11 @@
+# Byte-compiled / Emacs artifacts
+*.elc
+*~
+\#*\#
+.\#*
+\#*#
+
+# Packaging
+*.tar
+*.elpa
+/dist/
